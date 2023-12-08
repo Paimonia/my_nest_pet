@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
-import { User } from '../../user/entities/user.entity'; 
+import { Users } from '../../users/entities/users.entity'; 
 
 @Entity()
 export class Posts {
@@ -12,7 +12,7 @@ export class Posts {
   @Column({ type: 'varchar'})
   content: string;
 
-  @ManyToOne(() => User, user => user.posts)
+  @ManyToOne(() => Users, user => user.posts)
   @JoinColumn({ name: 'userId' })
-  user: User;
+  user: Users;
 }

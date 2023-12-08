@@ -1,9 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { OneToMany } from 'typeorm';
-import { Posts } from '../../post/entities/post.entity';
+import { Posts } from '../../posts/entities/posts.entity';
 
 @Entity()
-export class User {
+export class Users {
   @PrimaryGeneratedColumn()
   id: number;
 

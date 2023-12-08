@@ -12,16 +12,16 @@ import {
   const passwordRegEx =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,20}$/;
   
-  export class CreateUserDto {
+  export class CreateUsersDto {
     @IsString()
     @MinLength(2, { message: 'Name must have atleast 2 characters.' })
     @IsNotEmpty()
     name: string;
   
     @IsNotEmpty()
-    @MinLength(3, { message: 'Username must have atleast 3 characters.' })
+    @MinLength(3, { message: 'Usersname must have atleast 3 characters.' })
     @IsAlphanumeric(null, {
-      message: 'Username does not allow other than alpha numeric chars.',
+      message: 'Usersname does not allow other than alpha numeric chars.',
     })
     username: string;
   
