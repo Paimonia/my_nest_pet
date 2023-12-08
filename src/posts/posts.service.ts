@@ -3,38 +3,40 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { Posts } from './entities/posts.entity';
+import { UserPost } from './entities/posts.entity';
 
 @Injectable()
-export class PostsService {
+export class PostService {
   constructor(
-    @InjectRepository(Posts) private readonly postsRepository: Repository<Posts>,
+    @InjectRepository(UserPost) private readonly postRepository: Repository<UserPost>,
   ) {}
 
-  async createPost(createPostDto: CreatePostDto, userId: number): Promise<Posts> {
-    const post: Posts = new Posts();
-    post.title = createPostDto.title;
-    post.content = createPostDto.content;
-    post.user = { id: createPostDto.userId } as any; 
-    return this.postsRepository.save(post);
+  async createPost(createPostDto: CreatePostDto, userId: number): Promise<UserPost> {
+    const user = { id: createPostDto.userId } as any; 
+    const post: UserPost = this.postRepository.create({
+      ...createPostDto,
+      user
+    });
+    return this.postRepository.save(post);
   }
-  findAllPost(): Promise<Posts[]> {
-    return this.postsRepository.find();
-  }
-
-  viewPost(id: number): Promise<Posts> {
-    return this.postsRepository.findOneBy({ id });
+    
+  findAllPost(): Promise<UserPost[]> {
+    return this.postRepository.find();
   }
 
-  updatePost(id: number, updatePostDto: UpdatePostDto): Promise<Posts> {
-    const post: Posts = new Posts();
-    post.title = updatePostDto.title;
-    post.content = updatePostDto.content;
-    post.id = id;
-    return this.postsRepository.save(post);
+  findPostById(id: number): Promise<UserPost> {
+    return this.postRepository.findOne({ where: { id } });
+  }
+
+  
+  updatePost(id: number, updatePostDto: UpdatePostDto): Promise<UserPost> {
+    const post: UserPost = this.postRepository.create({
+      ...updatePostDto
+    });
+    return this.postRepository.save(post);
   }
 
   removePost(id: number): Promise<{ affected?: number }> {
-    return this.postsRepository.delete(id);
+    return this.postRepository.delete(id);
   }
 }

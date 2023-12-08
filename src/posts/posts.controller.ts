@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { PostsService } from './posts.service';
+import { PostService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 
-@Controller('post')
+@Controller('posts')
 export class PostsController {
-  constructor(private readonly postsService: PostsService) {}
+  constructor(private readonly postsService: PostService) {}
 
   @Post()
   create(@Body() createPostDto: CreatePostDto, @Query('userId') userId: number) {
@@ -19,7 +19,7 @@ export class PostsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.postsService.viewPost(+id);
+    return this.postsService.findPostById(+id);
   }
 
   @Patch(':id')

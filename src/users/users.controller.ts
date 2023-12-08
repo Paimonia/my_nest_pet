@@ -7,17 +7,17 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { UserssService } from './users.service';
+import { UsersService } from './users.service';
 import { CreateUsersDto } from './dto/create-user.dto';
 import { UpdateUsersDto } from './dto/update-user.dto';
 
 @Controller('users')
-export class UserssController {
-  constructor(private readonly usersService: UserssService) {}
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUsersDto: CreateUsersDto) {
-    return this.usersService.createUsers(createUsersDto);
+  create(@Body() createUserDto: CreateUsersDto) {
+    return this.usersService.createUser(createUserDto);
   }
 
   @Get()
@@ -27,17 +27,17 @@ export class UserssController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersService.viewUsers(+id);
+    return this.usersService.findUserById(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUsersDto: UpdateUsersDto) {
-    return this.usersService.updateUsers(+id, updateUsersDto);
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUsersDto) {
+    return this.usersService.updateUser(+id, updateUserDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usersService.removeUsers(+id);
+    return this.usersService.removeUser(+id);
   }
 
 }

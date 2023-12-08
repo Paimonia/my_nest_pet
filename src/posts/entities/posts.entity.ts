@@ -1,8 +1,8 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
-import { Users } from '../../users/entities/users.entity'; 
+import { User } from '../../users/entities/users.entity'; 
 
-@Entity()
-export class Posts {
+@Entity({ name: 'posts' })
+export class UserPost {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -12,7 +12,7 @@ export class Posts {
   @Column({ type: 'varchar'})
   content: string;
 
-  @ManyToOne(() => Users, user => user.posts)
+  @ManyToOne(() => User, user => user.posts)
   @JoinColumn({ name: 'userId' })
-  user: Users;
+  user: User;
 }

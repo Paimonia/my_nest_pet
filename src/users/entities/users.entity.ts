@@ -1,9 +1,10 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { OneToMany } from 'typeorm';
-import { Posts } from '../../posts/entities/posts.entity';
+import { UserPost } from '../../posts/entities/posts.entity';
+import { UserGender } from '../enums/gender.enum';
 
-@Entity()
-export class Users {
+@Entity({ name: 'users' })
+export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -22,14 +23,9 @@ export class Users {
   @Column({ type: 'varchar' })
   password: string;
 
-  @Column({ type: 'enum', enum: ['m', 'f', 'u'] })
-  /**
-   * m - male
-   * f - female
-   * u - unspecified
-   */
+  @Column({ type: 'enum', enum: UserGender })
   gender: string;
 
-  @OneToMany(() => Posts, post => post.user)
-  posts: Posts[];
+  @OneToMany(() => UserPost, post => post.user)
+  posts: UserPost[];
 }

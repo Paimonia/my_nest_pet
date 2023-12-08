@@ -1,49 +1,47 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 import { CreateUsersDto } from './dto/create-user.dto';
 import { UpdateUsersDto } from './dto/update-user.dto';
-import { Users } from './entities/users.entity';
+import { User } from './entities/users.entity';
 
 @Injectable()
-  export class UserssService {
+  export class UsersService {
     constructor(
-      @InjectRepository(Users) private readonly usersRepository: Repository<Users>,
+      @InjectRepository(User) private readonly usersRepository: Repository<User>,
     ) {}
 
-    createUsers(createUsersDto: CreateUsersDto): Promise<Users> {
-      const user: Users = new Users();
-      user.name = createUsersDto.name;
-      user.age = createUsersDto.age;
-      user.email = createUsersDto.email;
-      user.username = createUsersDto.username;
-      user.password = createUsersDto.password;
-      user.gender = createUsersDto.gender;
+    async createUser(createUserDto: CreateUsersDto): Promise<User> {
+      const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+
+      const user: User = this.usersRepository.create({
+        ...createUserDto,
+        password: hashedPassword,
+      });
+  
       return this.usersRepository.save(user);
     }
 
-
-    findAllUsers(): Promise<Users[]> {
+    findAllUsers(): Promise<User[]> {
       return this.usersRepository.find();
     }
 
 
-    viewUsers(id: number): Promise<Users> {
-      return this.usersRepository.findOneBy({ id });
+    findUserById(id: number): Promise<User> {
+      return this.usersRepository.findOne({ where: { id } });
     }
 
-    updateUsers(id: number, updateUsersDto: UpdateUsersDto): Promise<Users> {
-      const user: Users = new Users();
-      user.name = updateUsersDto.name;
-      user.age = updateUsersDto.age;
-      user.email = updateUsersDto.email;
-      user.username = updateUsersDto.username;
-      user.password = updateUsersDto.password;
-      user.id = id;
+   async updateUser(id: number, updateUserDto: UpdateUsersDto): Promise<User> {
+      const hashedPassword = await bcrypt.hash(updateUserDto.password, 10);
+      const user: User = this.usersRepository.create({
+        ...updateUserDto,
+        password: hashedPassword,
+      });
       return this.usersRepository.save(user);
     }
 
-    removeUsers(id: number): Promise<{ affected?: number }> {
+    removeUser(id: number): Promise<{ affected?: number }> {
       return this.usersRepository.delete(id);
     }
   }
